@@ -14,7 +14,11 @@ jobs:
         with:
           channel: 'stable'
       - run: flutter pub get
-      - run: flutter build apk --debug
+      - name: Build APK without java env flags
+        run: flutter build apk --debug
+        env:
+          JAVA_TOOL_OPTIONS: ""
+          _JAVA_OPTIONS: ""
       - uses: actions/upload-artifact@v3
         with:
           name: app-debug-apk
