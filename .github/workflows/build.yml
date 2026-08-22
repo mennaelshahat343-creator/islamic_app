@@ -19,7 +19,7 @@ jobs:
           channel: stable
 
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
@@ -27,19 +27,14 @@ jobs:
       - name: Flutter Pub Get
         run: flutter pub get
 
-      - name: Clear Java Options
-        run: |
-          unset JAVA_TOOL_OPTIONS
-          unset _JAVA_OPTIONS
-          unset JAVA_OPTS
-          java -version
-
       - name: Build APK
         run: |
           unset JAVA_TOOL_OPTIONS
           unset _JAVA_OPTIONS
           unset JAVA_OPTS
+          unset GRADLE_OPTS
           flutter clean
+          flutter pub get
           flutter build apk --debug
 
       - name: Upload APK
