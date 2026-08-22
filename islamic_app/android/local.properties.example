@@ -1,0 +1,6 @@
+# انسخ هذا الملف باسم local.properties وعدّل المسارات حسب جهازك
+# (Android Studio ينشئه غالبًا تلقائيًا عند فتح المشروع لأول مرة)
+sdk.dir=C:\\Users\\<YourUser>\\AppData\\Local\\Android\\Sdk
+flutter.sdk=C:\\src\\flutter
+flutter.versionName=1.0.0
+flutter.versionCode=1
