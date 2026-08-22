@@ -24,15 +24,23 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Fix JVM Args Issue
+      - name: Clean Bad Environment Variables & Fix Properties
         run: |
-          sed -i '/org.gradle.jvmargs/d' android/gradle.properties || true
-          echo "org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8" >> android/gradle.properties
+          unset JAVA_TOOL_OPTIONS
+          unset _JAVA_OPTIONS
+          rm -f android/gradle.properties
+          echo "org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8" > android/gradle.properties
+          echo "android.useAndroidX=true" >> android/gradle.properties
+          echo "android.enableJetifier=true" >> android/gradle.properties
 
       - name: Install Dependencies
         run: flutter pub get
 
       - name: Build APK
+        env:
+          JAVA_TOOL_OPTIONS: ""
+          _JAVA_OPTIONS: ""
+          GRADLE_OPTS: "-Xmx2048m"
         run: flutter build apk --release
 
       - name: Upload APK Artifact
