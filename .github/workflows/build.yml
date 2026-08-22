@@ -8,18 +8,42 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
-      - run: flutter pub get
-      - name: Build APK without java env flags
-        run: flutter build apk --debug
-        env:
-          JAVA_TOOL_OPTIONS: ""
-          _JAVA_OPTIONS: ""
-      - uses: actions/upload-artifact@v3
+          channel: stable
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Flutter Pub Get
+        run: flutter pub get
+
+      - name: Clear Java Options
+        run: |
+          unset JAVA_TOOL_OPTIONS
+          unset _JAVA_OPTIONS
+          unset JAVA_OPTS
+          java -version
+
+      - name: Build APK
+        run: |
+          unset JAVA_TOOL_OPTIONS
+          unset _JAVA_OPTIONS
+          unset JAVA_OPTS
+          flutter clean
+          flutter build apk --debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
           name: app-debug-apk
           path: build/app/outputs/flutter-apk/app-debug.apk
