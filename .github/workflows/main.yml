@@ -24,6 +24,11 @@ jobs:
         with:
           channel: 'stable'
 
+      - name: Fix JVM Args Issue
+        run: |
+          sed -i '/org.gradle.jvmargs/d' android/gradle.properties || true
+          echo "org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8" >> android/gradle.properties
+
       - name: Install Dependencies
         run: flutter pub get
 
